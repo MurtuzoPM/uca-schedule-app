@@ -1,0 +1,223 @@
+/* Custom Bootstrap Theme - Dark/Tech Cyberpunk */
+
+/* Import Bootstrap */
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+/* Custom Color Palette */
+:root {
+  /* Primary Colors - Neon/Tech */
+  --bs-primary: #00ff88;
+  --bs-primary-rgb: 0, 255, 136;
+  --bs-secondary: #0f4c81;
+  --bs-secondary-rgb: 15, 76, 129;
+  --bs-success: #00ff88;
+  --bs-danger: #ff4d00;
+  --bs-warning: #ffa500;
+  --bs-info: #00d4ff;
+  
+  /* Dark Background Colors */
+  --bs-body-bg: #000814;
+  --bs-body-color: #ffffff;
+  --bs-dark: #050a10;
+  --bs-dark-rgb: 5, 10, 16;
+  
+  /* Card/Component Backgrounds */
+  --bs-card-bg: rgba(15, 76, 129, 0.1);
+  --bs-card-border-color: #0f4c81;
+  
+  /* Text Colors */
+  --bs-muted: #8da2b5;
+  --bs-heading-color: #00ff88;
+  
+  /* Border Colors */
+  --bs-border-color: #0f4c81;
+  --bs-border-color-translucent: rgba(15, 76, 129, 0.3);
+}
+
+/* Dark Theme Overrides */
+body {
+  background: linear-gradient(135deg, #000814 0%, #001d3d 100%);
+  color: var(--bs-body-color);
+  font-family: 'Courier New', monospace;
+  min-height: 100vh;
+}
+
+/* Bootstrap Card Customization */
+.card {
+  background: var(--bs-card-bg);
+  border: 1px solid var(--bs-card-border-color);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.1);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 0 30px rgba(0, 255, 136, 0.2);
+  transform: translateY(-2px);
+}
+
+.card-header {
+  background: rgba(15, 76, 129, 0.2);
+  border-bottom: 1px solid var(--bs-primary);
+  color: var(--bs-primary);
+  font-weight: bold;
+}
+
+/* Bootstrap Button Customization */
+.btn-primary {
+  background: var(--bs-primary);
+  border-color: var(--bs-primary);
+  color: #000;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-primary:hover {
+  background: #00cc6f;
+  border-color: #00cc6f;
+  box-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
+}
+
+.btn-outline-primary {
+  border-color: var(--bs-primary);
+  color: var(--bs-primary);
+}
+
+.btn-outline-primary:hover {
+  background: var(--bs-primary);
+  color: #000;
+}
+
+.btn-danger {
+  background: var(--bs-danger);
+  border-color: var(--bs-danger);
+}
+
+.btn-danger:hover {
+  background: #cc3d00;
+  box-shadow: 0 0 15px rgba(255, 77, 0, 0.5);
+}
+
+/* Bootstrap Form Customization */
+.form-control,
+.form-select {
+  background: var(--bs-dark);
+  border: 1px solid var(--bs-border-color);
+  color: var(--bs-body-color);
+}
+
+.form-control:focus,
+.form-select:focus {
+  background: var(--bs-dark);
+  border-color: var(--bs-primary);
+  color: var(--bs-body-color);
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+}
+
+.form-label {
+  color: var(--bs-muted);
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+}
+
+.form-check-input {
+  background-color: var(--bs-dark);
+  border-color: var(--bs-border-color);
+}
+
+.form-check-input:checked {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+}
+
+/* Bootstrap Table Customization */
+.table {
+  color: var(--bs-body-color);
+}
+
+.table-dark {
+  --bs-table-bg: var(--bs-dark);
+  --bs-table-border-color: var(--bs-border-color);
+}
+
+.table-hover tbody tr:hover {
+  background: rgba(0, 255, 136, 0.1);
+}
+
+/* Bootstrap Modal Customization */
+.modal-content {
+  background: var(--bs-dark);
+  border: 1px solid var(--bs-primary);
+  box-shadow: 0 0 40px rgba(0, 255, 136, 0.3);
+}
+
+.modal-header {
+  border-bottom-color: var(--bs-border-color);
+}
+
+.modal-footer {
+  border-top-color: var(--bs-border-color);
+}
+
+/* Bootstrap Navbar Customization */
+.navbar {
+  background: rgba(5, 10, 16, 0.95) !important;
+  backdrop-filter: blur(10px);
+  border-bottom: 2px solid var(--bs-primary);
+}
+
+.navbar-brand {
+  color: var(--bs-primary) !important;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.nav-link {
+  color: var(--bs-body-color) !important;
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+  color: var(--bs-primary) !important;
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+}
+
+/* Bootstrap Alert Customization */
+.alert-success {
+  background: rgba(0, 255, 136, 0.1);
+  border-color: var(--bs-primary);
+  color: var(--bs-primary);
+}
+
+.alert-danger {
+  background: rgba(255, 77, 0, 0.1);
+  border-color: var(--bs-danger);
+  color: var(--bs-danger);
+}
+
+/* Utility Classes */
+.text-primary {
+  color: var(--bs-primary) !important;
+}
+
+.text-muted {
+  color: var(--bs-muted) !important;
+}
+
+.bg-dark-custom {
+  background: var(--bs-dark) !important;
+}
+
+.border-primary-custom {
+  border-color: var(--bs-primary) !important;
+}
+
+/* Responsive Utilities */
+@media (max-width: 768px) {
+  .card {
+    margin-bottom: 1rem;
+  }
+}

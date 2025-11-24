@@ -1,0 +1,204 @@
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap');
+
+:root {
+  --bg-color: #050a10;
+  --primary: #0f4c81;
+  --secondary: #ff4d00;
+  --text-main: #e0e6ed;
+  --text-muted: #8da2b5;
+  --border-width: 2px;
+  --card-bg: #0a121d;
+}
+
+body {
+  font-family: 'Rajdhani', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  overflow-x: hidden;
+  overflow-y: auto;
+  min-height: 100vh;
+}
+
+html {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.app-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* HUD Typography */
+h1,
+h2,
+h3 {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin: 0;
+}
+
+.glitch-text {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text-main);
+  text-shadow: 2px 2px 0px var(--primary);
+  margin-bottom: 2rem;
+  border-bottom: var(--border-width) solid var(--secondary);
+  display: inline-block;
+  padding-right: 2rem;
+}
+
+/* HUD Card */
+.hud-container {
+  animation: pulse 2s infinite;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.grid-layout {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.hud-card {
+  background: var(--card-bg);
+  border: var(--border-width) solid var(--primary);
+  position: relative;
+  padding: 1.5rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.hud-card::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  width: 20px;
+  height: 20px;
+  border-top: 4px solid var(--secondary);
+  border-left: 4px solid var(--secondary);
+}
+
+.hud-card::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 20px;
+  height: 20px;
+  border-bottom: 4px solid var(--secondary);
+  border-right: 4px solid var(--secondary);
+}
+
+.hud-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 15px rgba(15, 76, 129, 0.4);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid rgba(15, 76, 129, 0.3);
+  padding-bottom: 0.5rem;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  background-color: var(--secondary);
+  margin-right: 10px;
+  box-shadow: 0 0 5px var(--secondary);
+}
+
+.card-body {
+  font-size: 1.1rem;
+}
+
+.time-display {
+  margin-top: 1rem;
+  font-family: 'Courier New', monospace;
+  background: rgba(15, 76, 129, 0.1);
+  padding: 0.5rem;
+  border-left: 3px solid var(--primary);
+}
+
+.label {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-right: 0.5rem;
+}
+
+.value {
+  color: var(--secondary);
+  font-weight: bold;
+}
+
+/* Navbar */
+nav {
+  background: rgba(10, 18, 29, 0.95) !important;
+  border-bottom: var(--border-width) solid var(--primary);
+  padding: 1.5rem 2rem !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+nav a {
+  color: var(--text-muted) !important;
+  text-decoration: none;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-right: 2rem !important;
+  position: relative;
+  transition: color 0.3s;
+}
+
+nav a:hover,
+nav a:focus {
+  color: var(--secondary) !important;
+  text-shadow: 0 0 8px rgba(255, 77, 0, 0.5);
+}
+
+nav a::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--secondary);
+  transition: width 0.3s;
+}
+
+nav a:hover::after {
+  width: 100%;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
