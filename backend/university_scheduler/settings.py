@@ -16,7 +16,7 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-slb!&#@3t+)^4vpvpgag=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1, 0.0.0.0').split(',')
 
 # Application definition
 INSTALLED_APPS = [
@@ -136,8 +136,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'schedules.CustomUser'
 
 # CORS Configuration
-cors_origins = config('CORS_ALLOWED_ORIGINS', default='http://localhost:5173')
+cors_origins = config('CORS_ALLOWED_ORIGINS', default='http://localhost:5173,http://localhost:5174,http://localhost:5175')
 CORS_ALLOWED_ORIGINS = [origin.strip() for origin in cors_origins.split(',')]
+CORS_ALLOWED_ORIGINS.append("http://localhost:5173")
+CORS_ALLOWED_ORIGINS.append("http://127.0.0.1:5173")
+
+# Disable HTTPS redirect in development
+SECURE_SSL_REDIRECT = False
 
 # Security settings for production
 if not DEBUG:
@@ -147,3 +152,5 @@ if not DEBUG:
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
     X_FRAME_OPTIONS = 'DENY'
+
+CORS_ALLOW_CREDENTIALS = True   # very important for tokens/cookies
