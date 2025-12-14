@@ -1,1 +1,0 @@
-web: gunicorn university_scheduler.wsgi --bind 0.0.0.0:$PORT
