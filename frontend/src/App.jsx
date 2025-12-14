@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Dashboard from './pages/Dashboard';
 import Meals from './pages/Meals';
@@ -12,12 +11,14 @@ import LandingPage from './pages/LandingPage';
 import Profile from './pages/Profile';
 import ManageUsers from './pages/ManageUsers';
 import ManageCourses from './pages/ManageCourses';
+import Timetable from './pages/Timetable';
+import Notifications from './pages/Notifications';
+import { useAuth } from './context/AuthContext';
 
 const ProtectedRoute = ({ children }) => {
-  const token = localStorage.getItem('access_token');
-  if (!token) {
-    return <Navigate to="/login" replace />;
-  }
+  const { isAuthenticated, isLoading } = useAuth();
+  if (isLoading) return null;
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
   return children;
 };
 
@@ -34,6 +35,8 @@ function App() {
           <Route path="/meals" element={<ProtectedRoute><Meals /></ProtectedRoute>} />
           <Route path="/gym" element={<ProtectedRoute><Gym /></ProtectedRoute>} />
           <Route path="/classes" element={<ProtectedRoute><Classes /></ProtectedRoute>} />
+          <Route path="/timetable" element={<ProtectedRoute><Timetable /></ProtectedRoute>} />
+          <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
           <Route path="/student-classes" element={<ProtectedRoute><StudentClasses /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/users" element={<ProtectedRoute><ManageUsers /></ProtectedRoute>} />

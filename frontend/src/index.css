@@ -110,6 +110,48 @@ h3 {
   box-shadow: 0 0 15px rgba(15, 76, 129, 0.4);
 }
 
+/* Animated Cards */
+.animated-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.animated-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 10px 30px rgba(255, 77, 0, 0.3);
+  border-color: var(--secondary);
+}
+
+/* Animated Buttons */
+.animated-btn {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.animated-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.animated-btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.animated-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 5px 20px rgba(15, 76, 129, 0.5);
+}
+
 .card-header {
   display: flex;
   align-items: center;
@@ -201,4 +243,65 @@ nav a:hover::after {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Smooth transitions for all interactive elements */
+* {
+  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Enhanced card animations */
+.card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(15, 76, 129, 0.3);
+}
+
+/* Navbar link animations */
+.nav-link {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+  transform: translateY(-2px);
+}
+
+/* Button pulse effect */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.btn-primary:hover {
+  animation: pulse 1s infinite;
+  transform: scale(1.05);
+}
+
+/* Loading animation */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.loading-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(15, 76, 129, 0.1) 0%,
+    rgba(15, 76, 129, 0.3) 50%,
+    rgba(15, 76, 129, 0.1) 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
 }

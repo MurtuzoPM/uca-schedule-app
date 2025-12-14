@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { register, getStudentClasses } from '../services/api';
 import { useToast } from '../context/ToastContext';
+import anime from 'animejs';
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -17,6 +18,9 @@ const Register = () => {
     const [loading, setLoading] = useState(false);
     const { showToast } = useToast();
     const navigate = useNavigate();
+    const titleRef = useRef(null);
+    const cardRef = useRef(null);
+    const formRef = useRef(null);
 
     useEffect(() => {
         // Clear any existing tokens to ensure fresh registration
@@ -26,6 +30,33 @@ const Register = () => {
         getStudentClasses().then(res => {
             setAvailableClasses(res.data);
             setFilteredClasses(res.data);
+            
+            // Animate after data loads
+            anime({
+                targets: titleRef.current,
+                opacity: [0, 1],
+                translateY: [-30, 0],
+                duration: 800,
+                easing: 'easeOutExpo'
+            });
+
+            anime({
+                targets: cardRef.current,
+                opacity: [0, 1],
+                scale: [0.9, 1],
+                duration: 600,
+                delay: 200,
+                easing: 'easeOutBack'
+            });
+
+            anime({
+                targets: formRef.current?.querySelectorAll('.mb-3'),
+                opacity: [0, 1],
+                translateX: [-20, 0],
+                duration: 600,
+                delay: anime.stagger(100, { start: 400 }),
+                easing: 'easeOutExpo'
+            });
         }).catch(err => {
             console.error(err);
             showToast('Failed to load classes. Please refresh the page.', 'error');
@@ -52,8 +83,23 @@ const Register = () => {
         try {
             await register(formData);
             showToast('Registration successful! Please login.', 'success');
-            navigate('/');
+            
+            // Success animation
+            anime({
+                targets: cardRef.current,
+                scale: [1, 1.05, 1],
+                duration: 400,
+                easing: 'easeOutQuad',
+                complete: () => navigate('/')
+            });
         } catch (err) {
+            // Error shake animation
+            anime({
+                targets: cardRef.current,
+                translateX: [0, -10, 10, -10, 10, 0],
+                duration: 500,
+                easing: 'easeInOutQuad'
+            });
             const errorMsg = err.response?.data?.username?.[0] || err.response?.data?.email?.[0] || 'Registration failed';
             showToast(errorMsg, 'error');
         } finally {
@@ -65,11 +111,13 @@ const Register = () => {
         <div className="container">
             <div className="row justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
                 <div className="col-12 col-md-6 col-lg-4">
-                    <h2 className="glitch-text text-center mb-4">REGISTRATION</h2>
+                    <h2 ref={titleRef} className="glitch-text text-center mb-4" style={{ opacity: 0 }}>
+                        REGISTRATION
+                    </h2>
 
-                    <div className="card">
+                    <div ref={cardRef} className="card" style={{ opacity: 0 }}>
                         <div className="card-body p-4">
-                            <form onSubmit={handleRegister}>
+                            <form ref={formRef} onSubmit={handleRegister}>
                                 <div className="mb-3">
                                     <label className="form-label">USERNAME</label>
                                     <input

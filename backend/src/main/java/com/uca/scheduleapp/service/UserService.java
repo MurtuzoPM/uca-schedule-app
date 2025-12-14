@@ -76,7 +76,22 @@ public class UserService {
             Optional<StudentClass> studentClass = studentClassRepository.findById(request.getStudentClass());
             studentClass.ifPresent(user::setStudentClass);
         }
-        // Note: isSuperuser and isStaff would need separate DTO fields
+        
+        // Handle admin privileges
+        if (request.getIsSuperuser() != null) {
+            user.setIsSuperuser(request.getIsSuperuser());
+            // If user is set as superuser, automatically set isStaff to true
+            if (Boolean.TRUE.equals(request.getIsSuperuser())) {
+                user.setIsStaff(true);
+            }
+        }
+        // Allow explicit isStaff setting (but superuser always has staff privileges)
+        if (request.getIsStaff() != null) {
+            // Only set isStaff if user is not a superuser, or if explicitly setting it
+            if (!Boolean.TRUE.equals(user.getIsSuperuser()) || request.getIsStaff()) {
+                user.setIsStaff(request.getIsStaff());
+            }
+        }
 
         return toUserResponse(userRepository.save(user));
     }

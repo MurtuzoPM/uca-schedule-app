@@ -22,6 +22,9 @@ public class UniversityScheduleService {
     @Autowired
     private StudentClassRepository studentClassRepository;
 
+    @Autowired
+    private NotificationService notificationService;
+
     public List<UniversityScheduleDTO> getAllSchedules(User user, Long studentClassId) {
         List<UniversitySchedule> schedules;
         if (Boolean.TRUE.equals(user.getIsSuperuser())) {
@@ -139,8 +142,17 @@ public class UniversityScheduleService {
         if (request.getLocation() != null) {
             schedule.setLocation(request.getLocation());
         }
-        
-        return toDTO(universityScheduleRepository.save(schedule));
+
+        UniversitySchedule saved = universityScheduleRepository.save(schedule);
+
+        try {
+            String message = "Class updated: " + saved.getCourseName() + " (" + saved.getDay() + " " + saved.getStartTime() + "-" + saved.getEndTime() + ") @ " + saved.getLocation();
+            notificationService.notifyStudentClass(user, saved.getStudentClass().getId(), "CLASS_UPDATED", message);
+        } catch (Exception ignored) {
+            // best-effort notifications
+        }
+
+        return toDTO(saved);
     }
 
     @Transactional
@@ -152,7 +164,21 @@ public class UniversityScheduleService {
             throw new RuntimeException("Access denied");
         }
         
+        Long studentClassId = schedule.getStudentClass() != null ? schedule.getStudentClass().getId() : null;
+        String courseName = schedule.getCourseName();
+        String day = schedule.getDay();
+        String start = schedule.getStartTime() != null ? schedule.getStartTime().toString() : "";
+        String end = schedule.getEndTime() != null ? schedule.getEndTime().toString() : "";
+        String location = schedule.getLocation();
+
         universityScheduleRepository.delete(schedule);
+
+        try {
+            String message = "Class deleted: " + courseName + " (" + day + " " + start + "-" + end + ") @ " + location;
+            notificationService.notifyStudentClass(user, studentClassId, "CLASS_DELETED", message);
+        } catch (Exception ignored) {
+            // best-effort notifications
+        }
     }
 
     private UniversityScheduleDTO toDTO(UniversitySchedule schedule) {

@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { getMeals, createMeal, deleteMeal, getStudentClasses, getMe } from '../services/api';
 import { useToast } from '../context/ToastContext';
 import { useModal } from '../context/ModalContext';
+import anime from 'animejs';
 
 const Meals = () => {
     const [meals, setMeals] = useState([]);
@@ -10,6 +11,8 @@ const Meals = () => {
     const [newMeal, setNewMeal] = useState({ type: 'breakfast', time_start: '', time_end: '', menu: '' });
     const [isAdmin, setIsAdmin] = useState(false);
     const [loading, setLoading] = useState(true);
+    const titleRef = useRef(null);
+    const mealsRef = useRef(null);
 
     const { showToast } = useToast();
     const { showConfirm } = useModal();
@@ -17,6 +20,32 @@ const Meals = () => {
     useEffect(() => {
         checkUserRole();
     }, []);
+
+    useEffect(() => {
+        if (!loading && titleRef.current) {
+            anime({
+                targets: titleRef.current,
+                opacity: [0, 1],
+                translateY: [-30, 0],
+                duration: 800,
+                easing: 'easeOutExpo'
+            });
+        }
+    }, [loading]);
+
+    useEffect(() => {
+        if (meals.length > 0 && mealsRef.current) {
+            anime({
+                targets: mealsRef.current.querySelectorAll('.card'),
+                opacity: [0, 1],
+                translateY: [30, 0],
+                scale: [0.9, 1],
+                duration: 600,
+                delay: anime.stagger(100),
+                easing: 'easeOutBack'
+            });
+        }
+    }, [meals]);
 
     const checkUserRole = async () => {
         try {
@@ -104,7 +133,9 @@ const Meals = () => {
 
     return (
         <div className="container mt-4">
-            <h1 className="glitch-text mb-4">{isAdmin ? 'MANAGE_MEAL_SCHEDULES' : 'MY_MEAL_SCHEDULE'}</h1>
+            <h1 ref={titleRef} className="glitch-text mb-4" style={{ opacity: 0 }}>
+                {isAdmin ? 'MANAGE_MEAL_SCHEDULES' : 'MY_MEAL_SCHEDULE'}
+            </h1>
 
             {/* Admin: Multi-select Class Groups */}
             {isAdmin && (
@@ -194,7 +225,7 @@ const Meals = () => {
             )}
 
             {/* Meals Display */}
-            <div className="row g-3">
+            <div ref={mealsRef} className="row g-3">
                 {meals.length === 0 ? (
                     <div className="col-12">
                         <p className="text-center text-muted">
