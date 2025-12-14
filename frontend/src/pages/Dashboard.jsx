@@ -117,9 +117,6 @@ const Dashboard = () => {
                         </div>
                         <div className="d-flex gap-2 flex-wrap">
                             <Link to="/timetable" className="btn btn-primary btn-sm">OPEN_TIMETABLE</Link>
-                            <Link to="/classes" className="btn btn-outline-light btn-sm">CLASSES</Link>
-                            <Link to="/meals" className="btn btn-outline-light btn-sm">MEALS</Link>
-                            <Link to="/gym" className="btn btn-outline-light btn-sm">GYM</Link>
                             <Link to="/notifications" className="btn btn-outline-danger btn-sm">NOTIFICATIONS</Link>
                         </div>
                     </div>
