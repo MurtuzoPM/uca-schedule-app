@@ -120,6 +120,29 @@ Common routes:
 - `/gym`
 - `/profile`
 
+## Screenshots
+
+Add screenshots under `screenshots/` and reference them here.
+
+Suggested files:
+- `screenshots/dashboard.png`
+- `screenshots/timetable.png`
+- `screenshots/notifications.png`
+
+Placeholders:
+
+### Dashboard
+
+![Dashboard](screenshots/dashboard.png)
+
+### Timetable
+
+![Timetable](screenshots/timetable.png)
+
+### Notifications
+
+![Notifications](screenshots/notifications.png)
+
 ## Database notes
 
 - JPA is set to:
