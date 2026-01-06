@@ -1,48 +1,49 @@
 version: '3.8'
 
 services:
-  # 1. База данных MySQL
+  # 1. База данных
   db:
     image: mysql:8.0
     container_name: uca_mysql
-    # Важно: иногда MySQL 8 требует старый метод аутентификации для совместимости
     command: --default-authentication-plugin=mysql_native_password
     restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: root  # Пароль суперпользователя
-      MYSQL_DATABASE: uca_schedule # Имя базы данных, создастся автоматически
     ports:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+    environment:
+      # Берем значения из .env файла
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
 
-  # 2. Твой Spring Boot Backend
+  # 2. Backend (Spring Boot)
   backend:
     build: ./backend
     container_name: uca_backend
-    ports:
-      - "8080:8080"
-    environment:
-      # Меняем URL подключения под MySQL
-      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/uca_schedule?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=root
-      # Указываем, что используем диалект MySQL
-      - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.MySQL8Dialect
-      # Hibernate сам создаст таблицы
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-
     restart: on-failure
-
+    ports:
+      # Связываем внешний порт с внутренним через переменные
+      - "${BACKEND_EXTERNAL_PORT}:${BACKEND_INTERNAL_PORT}"
+    environment:
+      # Spring Boot сам подхватит эти настройки
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/${MYSQL_DATABASE}?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+      - SPRING_DATASOURCE_USERNAME=${MYSQL_USER}
+      - SPRING_DATASOURCE_PASSWORD=${MYSQL_PASSWORD}
+      - SERVER_PORT=${BACKEND_INTERNAL_PORT}
+      # Настройки для Hibernate
+      - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.MySQL8Dialect
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
     depends_on:
       - db
-    
-  # НОВЫЙ СЕРВИС
+
+  # 3. Frontend (React + Nginx)
   frontend:
     build: ./frontend
     container_name: uca_frontend
     ports:
-      - "3000:80"  # Мы откроем сайт на порту 3000
+      - "${FRONTEND_PORT}:80"
     depends_on:
       - backend
 
