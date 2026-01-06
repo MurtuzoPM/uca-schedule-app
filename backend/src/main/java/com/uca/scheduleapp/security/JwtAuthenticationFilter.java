@@ -36,21 +36,40 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try {
                 username = jwtUtil.extractUsername(jwt);
             } catch (Exception e) {
-                // Invalid token, continue without authentication
+                System.err.println(
+                        "JWT extractUsername failed for path=" + request.getRequestURI() + ": " + e.getMessage());
+                e.printStackTrace();
             }
+        } else if (authorizationHeader != null) {
+            System.err.println("Authorization header present but not Bearer for path=" + request.getRequestURI());
+        }
+
+        if (authorizationHeader == null) {
+            System.err.println("No Authorization header for path=" + request.getRequestURI());
+        }
+
+        if (username == null && jwt != null) {
+            System.err.println("JWT present but username could not be extracted for path=" + request.getRequestURI());
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+            try {
+                UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
-            if (jwtUtil.validateToken(jwt, userDetails)) {
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities());
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+                if (jwtUtil.validateToken(jwt, userDetails)) {
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                            userDetails, null, userDetails.getAuthorities());
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
+            } catch (Exception e) {
+                // If user not found or ambiguous (duplicate), or any other error, validation
+                // fails.
+                // We log it and do NOT set authentication, so it will result in 401 (if
+                // secured) or proceed.
+                System.err.println("Could not authenticate user " + username + ": " + e.getMessage());
             }
         }
         chain.doFilter(request, response);
     }
 }
-

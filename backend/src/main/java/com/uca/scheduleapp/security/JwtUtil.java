@@ -53,6 +53,10 @@ public class JwtUtil {
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
+        // CRITICAL: Usernames are not unique, so we uses Email as the token subject.
+        if (userDetails instanceof com.uca.scheduleapp.model.User) {
+            return createToken(claims, ((com.uca.scheduleapp.model.User) userDetails).getEmail());
+        }
         return createToken(claims, userDetails.getUsername());
     }
 
@@ -67,8 +71,17 @@ public class JwtUtil {
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
+        final String username = extractUsername(token); // This is the subject (Email or Username)
+
+        if (userDetails instanceof com.uca.scheduleapp.model.User) {
+            String userEmail = ((com.uca.scheduleapp.model.User) userDetails).getEmail();
+            // If token subject matches Email, it's valid
+            if (username.equals(userEmail)) {
+                return !isTokenExpired(token);
+            }
+        }
+
+        // Fallback: Check if token subject matches Username (legacy/unique users)
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 }
-

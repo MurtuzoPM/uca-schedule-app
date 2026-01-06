@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  # 1. База данных MySQL
+  db:
+    image: mysql:8.0
+    container_name: uca_mysql
+    # Важно: иногда MySQL 8 требует старый метод аутентификации для совместимости
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root  # Пароль суперпользователя
+      MYSQL_DATABASE: uca_schedule # Имя базы данных, создастся автоматически
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  # 2. Твой Spring Boot Backend
+  backend:
+    build: ./backend
+    container_name: uca_backend
+    ports:
+      - "8080:8080"
+    environment:
+      # Меняем URL подключения под MySQL
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/uca_schedule?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      # Указываем, что используем диалект MySQL
+      - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.MySQL8Dialect
+      # Hibernate сам создаст таблицы
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+
+    restart: on-failure
+
+    depends_on:
+      - db
+    
+  # НОВЫЙ СЕРВИС
+  frontend:
+    build: ./frontend
+    container_name: uca_frontend
+    ports:
+      - "3000:80"  # Мы откроем сайт на порту 3000
+    depends_on:
+      - backend
+
+volumes:
+  mysql_data:

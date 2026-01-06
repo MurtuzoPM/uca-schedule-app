@@ -22,13 +22,16 @@ public class AuthController {
             JwtResponse response = authService.login(request);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
+            System.err.println("Login failed: " + e.getMessage());
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 
     @PostMapping("/token/refresh/")
     public ResponseEntity<JwtResponse> refreshToken(@RequestBody JwtResponse request) {
-        // For simplicity, returning the same token. In production, implement proper refresh token logic
+        // For simplicity, returning the same token. In production, implement proper
+        // refresh token logic
         return ResponseEntity.ok(request);
     }
 
@@ -71,4 +74,3 @@ public class AuthController {
         }
     }
 }
-

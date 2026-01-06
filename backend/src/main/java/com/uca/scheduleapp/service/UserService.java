@@ -12,7 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 public class UserService {
@@ -21,6 +23,12 @@ public class UserService {
 
     @Autowired
     private StudentClassRepository studentClassRepository;
+
+    @Autowired
+    private NotificationService notificationService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public List<UserResponse> getAllUsers() {
         return userRepository.findAll().stream()
@@ -36,16 +44,14 @@ public class UserService {
 
     @Transactional
     public UserResponse createUser(RegisterRequest request) {
-        if (userRepository.existsByUsername(request.getUsername())) {
-            throw new RuntimeException("Username already exists");
-        }
+        // Username is no longer unique, so we don't check for existence by username.
         if (request.getEmail() != null && userRepository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("Email already exists");
         }
 
         User user = new User();
         user.setUsername(request.getUsername());
-        user.setPassword(request.getPassword()); // Should be encoded, but for admin creation we might handle differently
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setEmail(request.getEmail());
         if (request.getGender() != null) {
             user.setGender(User.Gender.valueOf(request.getGender()));
@@ -76,44 +82,62 @@ public class UserService {
             Optional<StudentClass> studentClass = studentClassRepository.findById(request.getStudentClass());
             studentClass.ifPresent(user::setStudentClass);
         }
-        
+
+        boolean roleChanged = false;
+        String newRole = "";
+
         // Handle admin privileges
         if (request.getIsSuperuser() != null) {
-            user.setIsSuperuser(request.getIsSuperuser());
-            // If user is set as superuser, automatically set isStaff to true
-            if (Boolean.TRUE.equals(request.getIsSuperuser())) {
-                user.setIsStaff(true);
+            if (!request.getIsSuperuser().equals(user.getIsSuperuser())) {
+                user.setIsSuperuser(request.getIsSuperuser());
+                roleChanged = true;
+                if (Boolean.TRUE.equals(request.getIsSuperuser())) {
+                    user.setIsStaff(true);
+                    newRole = "Admin";
+                } else {
+                    newRole = user.getIsStaff() ? "Staff" : "Student";
+                }
             }
         }
         // Allow explicit isStaff setting (but superuser always has staff privileges)
         if (request.getIsStaff() != null) {
             // Only set isStaff if user is not a superuser, or if explicitly setting it
             if (!Boolean.TRUE.equals(user.getIsSuperuser()) || request.getIsStaff()) {
-                user.setIsStaff(request.getIsStaff());
+                if (!request.getIsStaff().equals(user.getIsStaff())) {
+                    user.setIsStaff(request.getIsStaff());
+                    roleChanged = true;
+                    newRole = request.getIsStaff() ? "Staff" : "Student";
+                }
             }
         }
 
-        return toUserResponse(userRepository.save(user));
+        User savedUser = userRepository.save(user);
+
+        if (roleChanged) {
+            notificationService.notifyUser(savedUser, "ROLE_UPDATED", "Your role has been updated to: " + newRole);
+        }
+
+        return toUserResponse(savedUser);
     }
 
     @Transactional
     public void deleteUser(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+        // Delete related notifications first to satisfy FK constraint
+        notificationService.deleteUserNotifications(user);
         userRepository.delete(user);
     }
 
     private UserResponse toUserResponse(User user) {
         return new UserResponse(
-            user.getId(),
-            user.getUsername(),
-            user.getEmail(),
-            user.getGender() != null ? user.getGender().name() : null,
-            user.getStudentClass() != null ? user.getStudentClass().getId() : null,
-            user.getStudentClass() != null ? user.getStudentClass().getName() : null,
-            user.getStudentClass() != null ? user.getStudentClass().getYearLevel().name() : null,
-            user.getIsSuperuser()
-        );
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getGender() != null ? user.getGender().name() : null,
+                user.getStudentClass() != null ? user.getStudentClass().getId() : null,
+                user.getStudentClass() != null ? user.getStudentClass().getName() : null,
+                user.getStudentClass() != null ? user.getStudentClass().getYearLevel().name() : null,
+                user.getIsSuperuser());
     }
 }
-

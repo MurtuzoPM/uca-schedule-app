@@ -82,7 +82,7 @@ const Login = () => {
                         <div className="card-body p-4">
                             <form ref={formRef} onSubmit={handleSubmit}>
                                 <div className="mb-3" style={{ opacity: 0 }}>
-                                    <label className="form-label">USERNAME</label>
+                                    <label className="form-label">EMAIL OR USERNAME</label>
                                     <input
                                         type="text"
                                         className="form-control"

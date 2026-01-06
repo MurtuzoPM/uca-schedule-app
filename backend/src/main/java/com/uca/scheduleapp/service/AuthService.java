@@ -38,17 +38,14 @@ public class AuthService {
 
     public JwtResponse login(LoginRequest request) {
         authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
-        );
+                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
         String token = jwtUtil.generateToken(userDetails);
         return new JwtResponse(token, token); // In a real app, you'd generate a separate refresh token
     }
 
     public UserResponse register(RegisterRequest request) {
-        if (userRepository.existsByUsername(request.getUsername())) {
-            throw new RuntimeException("Username already exists");
-        }
+        // Username is no longer unique, so we don't check for existence by username.
         if (request.getEmail() != null && userRepository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("Email already exists");
         }
@@ -72,7 +69,10 @@ public class AuthService {
         return toUserResponse(savedUser);
     }
 
-    public UserResponse getCurrentUser(User user) {
+    public UserResponse getCurrentUser(User principal) {
+        // Fix for LazyInitializationException: Reload user from DB to ensure it's
+        // attached to current session
+        User user = userRepository.findById(principal.getId()).orElse(principal);
         return toUserResponse(user);
     }
 
@@ -101,15 +101,15 @@ public class AuthService {
 
     private UserResponse toUserResponse(User user) {
         return new UserResponse(
-            user.getId(),
-            user.getUsername(),
-            user.getEmail(),
-            user.getGender() != null ? user.getGender().name() : null,
-            user.getStudentClass() != null ? user.getStudentClass().getId() : null,
-            user.getStudentClass() != null ? user.getStudentClass().getName() : null,
-            user.getStudentClass() != null ? user.getStudentClass().getYearLevel().name() : null,
-            user.getIsSuperuser()
-        );
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getGender() != null ? user.getGender().name() : null,
+                user.getStudentClass() != null ? user.getStudentClass().getId() : null,
+                user.getStudentClass() != null ? user.getStudentClass().getName() : null,
+                (user.getStudentClass() != null && user.getStudentClass().getYearLevel() != null)
+                        ? user.getStudentClass().getYearLevel().name()
+                        : null,
+                user.getIsSuperuser());
     }
 }
-

@@ -22,7 +22,7 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 150)
+    @Column(nullable = false, length = 150)
     private String username;
 
     @Column(nullable = false)
@@ -80,4 +80,3 @@ public class User implements UserDetails {
         return Boolean.TRUE.equals(isActive);
     }
 }
-

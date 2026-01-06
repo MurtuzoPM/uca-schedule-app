@@ -1,11 +1,11 @@
 import axios from 'axios';
 
 // THIS LINE MUST STAY LIKE THIS
-const API_URL = 'http://127.0.0.1:8000/api';
+const API_URL = '/api';
 
 const api = axios.create({
     baseURL: API_URL,
-    withCredentials: true,                    // important for cookies if used
+    withCredentials: false,                    // important for cookies if used
 });
 
 api.interceptors.request.use(

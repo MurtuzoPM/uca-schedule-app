@@ -15,6 +15,9 @@ public class StudentClassService {
     @Autowired
     private StudentClassRepository studentClassRepository;
 
+    @Autowired
+    private NotificationService notificationService;
+
     public List<StudentClassDTO> getAllStudentClasses() {
         return studentClassRepository.findAll().stream()
                 .map(this::toDTO)
@@ -32,7 +35,9 @@ public class StudentClassService {
         StudentClass studentClass = new StudentClass();
         studentClass.setName(request.getName());
         studentClass.setYearLevel(StudentClass.YearLevel.valueOf(request.getYearLevel()));
-        return toDTO(studentClassRepository.save(studentClass));
+        StudentClass saved = studentClassRepository.save(studentClass);
+        notificationService.notifyAllUsers("CLASS_CREATED", "New class available: " + saved.getName());
+        return toDTO(saved);
     }
 
     @Transactional
@@ -45,7 +50,9 @@ public class StudentClassService {
         if (request.getYearLevel() != null) {
             studentClass.setYearLevel(StudentClass.YearLevel.valueOf(request.getYearLevel()));
         }
-        return toDTO(studentClassRepository.save(studentClass));
+        StudentClass saved = studentClassRepository.save(studentClass);
+        notificationService.notifyAllUsers("CLASS_UPDATED", "Class updated: " + saved.getName());
+        return toDTO(saved);
     }
 
     @Transactional
@@ -57,10 +64,8 @@ public class StudentClassService {
 
     private StudentClassDTO toDTO(StudentClass studentClass) {
         return new StudentClassDTO(
-            studentClass.getId(),
-            studentClass.getName(),
-            studentClass.getYearLevel().name()
-        );
+                studentClass.getId(),
+                studentClass.getName(),
+                studentClass.getYearLevel().name());
     }
 }
-

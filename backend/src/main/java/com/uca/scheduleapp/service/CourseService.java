@@ -15,6 +15,9 @@ public class CourseService {
     @Autowired
     private CourseRepository courseRepository;
 
+    @Autowired
+    private NotificationService notificationService;
+
     public List<CourseDTO> getAllCourses() {
         return courseRepository.findAll().stream()
                 .map(this::toDTO)
@@ -32,7 +35,9 @@ public class CourseService {
         Course course = new Course();
         course.setName(request.getName());
         course.setYearLevel(Course.YearLevel.valueOf(request.getYearLevel()));
-        return toDTO(courseRepository.save(course));
+        Course saved = courseRepository.save(course);
+        notificationService.notifyAllUsers("COURSE_CREATED", "New course available: " + saved.getName());
+        return toDTO(saved);
     }
 
     @Transactional
@@ -45,7 +50,9 @@ public class CourseService {
         if (request.getYearLevel() != null) {
             course.setYearLevel(Course.YearLevel.valueOf(request.getYearLevel()));
         }
-        return toDTO(courseRepository.save(course));
+        Course saved = courseRepository.save(course);
+        notificationService.notifyAllUsers("COURSE_UPDATED", "Course updated: " + saved.getName());
+        return toDTO(saved);
     }
 
     @Transactional
@@ -57,10 +64,8 @@ public class CourseService {
 
     private CourseDTO toDTO(Course course) {
         return new CourseDTO(
-            course.getId(),
-            course.getName(),
-            course.getYearLevel().name()
-        );
+                course.getId(),
+                course.getName(),
+                course.getYearLevel().name());
     }
 }
-

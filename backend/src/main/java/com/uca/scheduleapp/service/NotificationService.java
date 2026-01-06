@@ -23,9 +23,9 @@ public class NotificationService {
 
     public List<NotificationDTO> getMyNotifications(User user) {
         return notificationRepository.findByUserOrderByCreatedAtDesc(user)
-            .stream()
-            .map(this::toDTO)
-            .collect(Collectors.toList());
+                .stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
     }
 
     public long getUnreadCount(User user) {
@@ -38,7 +38,7 @@ public class NotificationService {
             throw new RuntimeException("Notification id is required");
         }
         Notification n = notificationRepository.findById(notificationId)
-            .orElseThrow(() -> new RuntimeException("Notification not found"));
+                .orElseThrow(() -> new RuntimeException("Notification not found"));
         if (!n.getUser().getId().equals(user.getId())) {
             throw new RuntimeException("Access denied");
         }
@@ -59,29 +59,51 @@ public class NotificationService {
 
     @Transactional
     public void notifyStudentClass(User actor, Long studentClassId, String type, String message) {
-        if (studentClassId == null) return;
+        if (studentClassId == null)
+            return;
         List<User> users = userRepository.findByStudentClassId(studentClassId);
         for (User u : users) {
             if (actor != null && u.getId().equals(actor.getId())) {
                 continue;
             }
-            Notification n = new Notification();
-            n.setUser(u);
-            n.setType(type);
-            n.setMessage(message);
-            n.setIsRead(false);
-            n.setCreatedAt(LocalDateTime.now());
-            notificationRepository.save(n);
+            createNotification(u, type, message);
         }
+    }
+
+    @Transactional
+    public void notifyUser(User user, String type, String message) {
+        createNotification(user, type, message);
+    }
+
+    @Transactional
+    public void notifyAllUsers(String type, String message) {
+        List<User> users = userRepository.findAll();
+        for (User u : users) {
+            createNotification(u, type, message);
+        }
+    }
+
+    @Transactional
+    public void deleteUserNotifications(User user) {
+        notificationRepository.deleteByUser(user);
+    }
+
+    private void createNotification(User user, String type, String message) {
+        Notification n = new Notification();
+        n.setUser(user);
+        n.setType(type);
+        n.setMessage(message);
+        n.setIsRead(false);
+        n.setCreatedAt(LocalDateTime.now());
+        notificationRepository.save(n);
     }
 
     private NotificationDTO toDTO(Notification n) {
         return new NotificationDTO(
-            n.getId(),
-            n.getType(),
-            n.getMessage(),
-            n.getIsRead(),
-            n.getCreatedAt()
-        );
+                n.getId(),
+                n.getType(),
+                n.getMessage(),
+                n.getIsRead(),
+                n.getCreatedAt());
     }
 }
