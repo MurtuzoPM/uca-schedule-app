@@ -30,7 +30,7 @@ const Register = () => {
         getStudentClasses().then(res => {
             setAvailableClasses(res.data);
             setFilteredClasses(res.data);
-            
+
             // Animate after data loads
             anime({
                 targets: titleRef.current,
@@ -83,7 +83,7 @@ const Register = () => {
         try {
             await register(formData);
             showToast('Registration successful! Please login.', 'success');
-            
+
             // Success animation
             anime({
                 targets: cardRef.current,
