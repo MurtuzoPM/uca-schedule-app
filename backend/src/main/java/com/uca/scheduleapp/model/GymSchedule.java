@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalTime;
 
 @Entity
@@ -25,9 +25,11 @@ public class GymSchedule {
     private String day;
 
     @Column(name = "open_time", nullable = false)
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime openTime;
 
     @Column(name = "close_time", nullable = false)
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime closeTime;
 
     public enum Gender {

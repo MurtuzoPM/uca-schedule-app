@@ -242,7 +242,7 @@ const Gym = () => {
                                         <div className="card">
                                             <div className="card-body">
                                                 <p className="card-text text-muted mb-1">
-                                                    OPEN: <span className="text-white">{s.open_time.slice(0, 5)}</span>
+                                                    OPEN: <span className="text-white">{s.open_time ? s.open_time.substring(0, 5) : "--:--"}</span>
                                                 </p>
                                                 <p className="card-text text-muted mb-3">
                                                     CLOSE: <span className="text-white">{s.close_time.slice(0, 5)}</span>
