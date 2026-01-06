@@ -61,3 +61,14 @@ htmlcov/
 *.bak
 *.tmp
 .cache/
+# Игнорируем результаты сборки Java
+**/target/
+*.jar
+*.war
+
+# Игнорируем папку зависимостей React
+**/node_modules/
+**/dist/
+
+# Игнорируем секреты
+.env
