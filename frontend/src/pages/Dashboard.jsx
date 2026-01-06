@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { getMe, getMyTimetable, getNotifications, getUnreadNotificationCount } from '../services/api';
 import anime from 'animejs';
+import AIChatWidget from '../components/AIChatWidget';
 
 const Dashboard = () => {
     const [user, setUser] = useState(null);
@@ -216,6 +217,7 @@ const Dashboard = () => {
                     </div>
                 </div>
             </div>
+            <AIChatWidget />
         </div>
     );
 };

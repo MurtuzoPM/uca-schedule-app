@@ -17,6 +17,7 @@
 /home/student/Desktop/uca-schedule-app/uca-schedule-app/backend/src/main/java/com/uca/scheduleapp/model/UniversitySchedule.java
 /home/student/Desktop/uca-schedule-app/uca-schedule-app/backend/src/main/java/com/uca/scheduleapp/controller/CourseController.java
 /home/student/Desktop/uca-schedule-app/uca-schedule-app/backend/src/main/java/com/uca/scheduleapp/service/UniversityScheduleService.java
+/home/student/Desktop/uca-schedule-app/uca-schedule-app/backend/src/main/java/com/uca/scheduleapp/service/AIService.java
 /home/student/Desktop/uca-schedule-app/uca-schedule-app/backend/src/main/java/com/uca/scheduleapp/dto/LoginRequest.java
 /home/student/Desktop/uca-schedule-app/uca-schedule-app/backend/src/main/java/com/uca/scheduleapp/dto/MealDTO.java
 /home/student/Desktop/uca-schedule-app/uca-schedule-app/backend/src/main/java/com/uca/scheduleapp/controller/NotificationController.java
@@ -37,6 +38,7 @@
 /home/student/Desktop/uca-schedule-app/uca-schedule-app/backend/src/main/java/com/uca/scheduleapp/dto/StudentClassDTO.java
 /home/student/Desktop/uca-schedule-app/uca-schedule-app/backend/src/main/java/com/uca/scheduleapp/model/Meal.java
 /home/student/Desktop/uca-schedule-app/uca-schedule-app/backend/src/main/java/com/uca/scheduleapp/model/Course.java
+/home/student/Desktop/uca-schedule-app/uca-schedule-app/backend/src/main/java/com/uca/scheduleapp/controller/AIController.java
 /home/student/Desktop/uca-schedule-app/uca-schedule-app/backend/src/main/java/com/uca/scheduleapp/config/SecurityConfig.java
 /home/student/Desktop/uca-schedule-app/uca-schedule-app/backend/src/main/java/com/uca/scheduleapp/service/UserService.java
 /home/student/Desktop/uca-schedule-app/uca-schedule-app/backend/src/main/java/com/uca/scheduleapp/controller/GymScheduleController.java
