@@ -44,8 +44,8 @@ function App() {
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/users" element={<ProtectedRoute><ManageUsers /></ProtectedRoute>} />
           <Route path="/courses" element={<ProtectedRoute><ManageCourses /></ProtectedRoute>} />
-	  <Route path="/forgot-password" element={<ForgotPassword />} />
-	  <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
         </Routes>
       </div>
     </Router>
