@@ -60,12 +60,19 @@ public class SecurityConfig {
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        // Public endpoints (no token required)
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/error").permitAll()
                         .requestMatchers("/token/**", "/register/**").permitAll()
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/ai/**", "/api/ai/**").authenticated()
+                        // --- Added Password Reset Endpoints ---
+                        .requestMatchers("/api/forgot-password/**", "/api/reset-password/**").permitAll()
+                        // ---------------------------------------
                         .requestMatchers(HttpMethod.GET, "/student-classes/**").permitAll()
+
+                        // Protected endpoints (require authentication)
+                        .requestMatchers("/ai/**", "/api/ai/**").authenticated()
+
+                        // Everything else
                         .anyRequest().authenticated());
 
         http.authenticationProvider(authenticationProvider());
