@@ -108,6 +108,12 @@ const Login = () => {
                                         INITIATE_SESSION
                                     </button>
 
+				<div style={{ marginTop: '15px', textAlign: 'center' }}>
+				    <Link to="/forgot-password" style={{ color: '#007bff', textDecoration: 'none', fontSize: '14px' }}>
+		                        Forgot Password?
+                                    </Link>
+				</div>
+
                                     <p className="text-center mb-0">
                                         <Link to="/register" className="text-danger text-decoration-none">
                                             CREATE_NEW_ID

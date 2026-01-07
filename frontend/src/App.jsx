@@ -14,6 +14,8 @@ import ManageCourses from './pages/ManageCourses';
 import Timetable from './pages/Timetable';
 import Notifications from './pages/Notifications';
 import { useAuth } from './context/AuthContext';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './components/ResetPassword';
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuth();
@@ -42,6 +44,8 @@ function App() {
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/users" element={<ProtectedRoute><ManageUsers /></ProtectedRoute>} />
           <Route path="/courses" element={<ProtectedRoute><ManageCourses /></ProtectedRoute>} />
+	  <Route path="/forgot-password" element={<ForgotPassword />} />
+	  <Route path="/reset-password" element={<ResetPassword />} />
         </Routes>
       </div>
     </Router>
