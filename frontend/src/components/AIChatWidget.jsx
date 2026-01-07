@@ -28,7 +28,7 @@ const AIChatWidget = () => {
 
         try {
             const token = localStorage.getItem('access_token');
-            const response = await axios.post('http://127.0.0.1:8000/api/ai/chat',
+            const response = await axios.post('http://138.197.192.172:8000/ai/chat',
                 { message: userMsg },
                 { headers: { Authorization: `Bearer ${token}` } }
             );

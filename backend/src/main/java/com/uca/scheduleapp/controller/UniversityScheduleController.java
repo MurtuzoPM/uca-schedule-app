@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/classes")
-@CrossOrigin(origins = "*")
+@RequestMapping("/classes")
+@CrossOrigin
 public class UniversityScheduleController {
     @Autowired
     private UniversityScheduleService universityScheduleService;

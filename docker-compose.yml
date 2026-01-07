@@ -32,6 +32,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=${MYSQL_USER}
       - SPRING_DATASOURCE_PASSWORD=${MYSQL_PASSWORD}
       - SERVER_PORT=${BACKEND_INTERNAL_PORT}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
       # Настройки для Hibernate
       - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.MySQL8Dialect
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update

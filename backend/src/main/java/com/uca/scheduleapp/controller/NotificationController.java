@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/notifications")
-@CrossOrigin(origins = "*")
+@RequestMapping("/notifications")
+@CrossOrigin
 public class NotificationController {
     @Autowired
     private NotificationService notificationService;

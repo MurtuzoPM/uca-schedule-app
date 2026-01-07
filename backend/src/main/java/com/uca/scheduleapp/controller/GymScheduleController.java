@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/gym")
-@CrossOrigin(origins = "*")
+@RequestMapping("/gym")
+@CrossOrigin
 public class GymScheduleController {
     @Autowired
     private GymScheduleService gymScheduleService;
