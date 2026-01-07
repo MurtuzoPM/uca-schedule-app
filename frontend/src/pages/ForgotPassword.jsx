@@ -15,13 +15,13 @@ const ForgotPassword = () => {
         setError('');
 
         try {
-            // Note: Ensure the /api prefix matches your backend configuration
-            await axios.post('http://138.197.192.172:8000/api/forgot-password', { email });
-            setMessage("Instructions to reset your password have been sent to your email.");
+            // We wrap the email string in an object { email: email }
+            await axios.post('http://138.197.192.172:8000/api/forgot-password', {
+                email: email
+            });
+            setMessage("Code sent!");
         } catch (err) {
-            setError(err.response?.data?.message || "Email not found or server error.");
-        } finally {
-            setIsLoading(false);
+            setError("Email not found or server error.");
         }
     };
 

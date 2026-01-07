@@ -21,17 +21,20 @@ public class PasswordResetService {
 
     public void processForgotPassword(String email) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Generate a unique token
-        String token = UUID.randomUUID().toString();
-        user.setResetToken(token);
-        user.setResetTokenExpiry(LocalDateTime.now().plusMinutes(15)); // Valid for 15 mins
+        // Generate 6-digit OTP
+        String otp = String.valueOf((int) ((Math.random() * 900000) + 100000));
+        user.setResetToken(otp); // Store OTP in the same token column
+        user.setResetTokenExpiry(LocalDateTime.now().plusMinutes(10));
         userRepository.save(user);
 
-        // Send Email
-        String resetLink = "http://138.197.192.172:3000/reset-password?token=" + token;
-        sendEmail(user.getEmail(), resetLink);
+        // Send the OTP Email
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(user.getEmail());
+        message.setSubject("Your Password Reset Code");
+        message.setText("Your verification code is: " + otp + "\nThis code expires in 10 minutes.");
+        mailSender.send(message);
     }
 
     private void sendEmail(String to, String link) {
