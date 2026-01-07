@@ -63,11 +63,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/error").permitAll()
                         .requestMatchers("/token/**", "/register/**").permitAll()
-			.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-			.requestMatchers("/ai/**", "/api/ai/**").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/student-classes/**").permitAll() // Allow public access
-                                                                                                // to view classes for
-                                                                                                // registration
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/ai/**", "/api/ai/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/student-classes/**").permitAll()
                         .anyRequest().authenticated());
 
         http.authenticationProvider(authenticationProvider());
