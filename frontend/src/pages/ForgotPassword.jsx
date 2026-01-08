@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
 
+   
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
@@ -15,15 +18,18 @@ const ForgotPassword = () => {
         setError('');
 
         try {
-            // We wrap the email string in an object { email: email }
-            await axios.post('http://138.197.192.172:8000/api/forgot-password', {
-                email: email
-            });
-            setMessage("Code sent!");
+            await axios.post('http://138.197.192.172:8000/api/forgot-password', { email });
+            setMessage("The code was sent to your email! Redirecting...");
+            
+            // 3. Wait 2 seconds so the user can read the message, then redirect
+            setTimeout(() => {
+                navigate('/reset-password'); 
+            }, 2500);
+
         } catch (err) {
             setError("Email not found or server error.");
         }
-    };
+     };
 
     return (
         <div className="auth-container" style={{ maxWidth: '400px', margin: '50px auto', padding: '20px', border: '1px solid #ccc', borderRadius: '8px' }}>

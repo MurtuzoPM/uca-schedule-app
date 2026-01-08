@@ -5,6 +5,7 @@ import com.uca.scheduleapp.service.PasswordResetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.uca.scheduleapp.dto.ResetPasswordRequest;
 
 @RestController
 @RequestMapping("/api")
@@ -23,4 +24,16 @@ public class PasswordResetController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest request) {
+        System.out.println("RECEIVED TOKEN: " + request.getToken());
+	System.out.println("RECEIVED PASSWORD: " + request.getNewPassword());
+        try {
+            resetService.updatePassword(request.getToken(), request.getNewPassword());
+            return ResponseEntity.ok("Password reset successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+     }
 }

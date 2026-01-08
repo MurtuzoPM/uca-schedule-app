@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 public class PasswordResetService {
@@ -18,6 +19,9 @@ public class PasswordResetService {
 
     @Autowired
     private JavaMailSender mailSender;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public void processForgotPassword(String email) {
         User user = userRepository.findByEmail(email)
@@ -44,4 +48,21 @@ public class PasswordResetService {
         message.setText("Click the link below to reset your password:\n" + link);
         mailSender.send(message);
     }
+
+    public void updatePassword(String otp, String newPassword) {
+    // Look for the user who has this specific OTP
+    User user = userRepository.findByResetToken(otp)
+            .orElseThrow(() -> new RuntimeException("Invalid or incorrect code."));
+
+    // Check if the code has expired
+    if (user.getResetTokenExpiry().isBefore(LocalDateTime.now())) {
+        throw new RuntimeException("The code has expired. Please request a new one.");
+    }
+
+    // Encrypt the new password and clear the token
+    user.setPassword(passwordEncoder.encode(newPassword));
+    user.setResetToken(null);
+    user.setResetTokenExpiry(null);
+    userRepository.save(user);
+}
 }
