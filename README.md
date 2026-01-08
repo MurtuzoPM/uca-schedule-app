@@ -135,11 +135,11 @@ Placeholders:
 
 ![Dashboard](screenshots/dashboard.png)
 
-### Timetable
+### Login
 
 ![Timetable](screenshots/timetable.png)
 
-### Notifications
+### Timetable
 
 ![Notifications](screenshots/notifications.png)
 
