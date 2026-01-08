@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import anime from 'animejs';
+import Footer from '../components/Footer';
 
 const LandingPage = () => {
     const titleRef = useRef(null);
@@ -118,7 +119,15 @@ const LandingPage = () => {
                     It leverages a modern Full-Stack architecture to provide real-time timetable updates and secure user management.
                 </p>
 
-
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px' }}>
+                    <div style={{ textAlign: 'left' }}>
+                        <h4 style={{ margin: '0', color: '#333' }}>Created by mrtpm</h4>
+                        <div style={{ marginTop: '10px' }}>
+                            <a href="https://www.linkedin.com/in/murtuzo-mamadziyoev-762109332/" target="_blank" rel="noreferrer" style={{ marginRight: '15px', color: '#007bff', textDecoration: 'none', fontWeight: 'bold' }}>LinkedIn</a>
+                            <a href="https://github.com/MurtuzoPM" target="_blank" rel="noreferrer" style={{ color: '#333', textDecoration: 'none', fontWeight: 'bold' }}>GitHub</a>
+                        </div>
+                    </div>
+                </div>
             </section>
         </div>
     );
