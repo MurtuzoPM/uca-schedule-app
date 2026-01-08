@@ -16,7 +16,6 @@ import Notifications from './pages/Notifications';
 import { useAuth } from './context/AuthContext';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
-import Footer from './components/Footer';
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuth();
@@ -47,7 +46,6 @@ function App() {
           <Route path="/courses" element={<ProtectedRoute><ManageCourses /></ProtectedRoute>} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/footer" element={<Footer />} />
         </Routes>
       </div>
     </Router>
