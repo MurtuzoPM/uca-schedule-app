@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import anime from 'animejs';
-import Footer from '../components/Footer';
 
 const LandingPage = () => {
     const titleRef = useRef(null);
