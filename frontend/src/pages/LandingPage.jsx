@@ -54,35 +54,35 @@ const LandingPage = () => {
 
     return (
         <div className="hud-container" style={{ textAlign: 'center', marginTop: '4rem' }}>
-            <h1 
+            <h1
                 ref={titleRef}
-                className="glitch-text" 
+                className="glitch-text"
                 style={{ fontSize: '4rem', marginBottom: '1rem', opacity: 0 }}
             >
                 University of Central Asia OS
             </h1>
-            <p 
+            <p
                 ref={subtitleRef}
                 style={{ fontSize: '1.5rem', color: '#8da2b5', marginBottom: '3rem', maxWidth: '800px', margin: '0 auto 3rem auto', opacity: 0 }}
             >
                 OPTIMIZE YOUR ACADEMIC LIFE WITH PRECISION SCHEDULE MANAGEMENT.
             </p>
 
-            <div 
+            <div
                 ref={buttonsRef}
                 style={{ display: 'flex', justifyContent: 'center', gap: '2rem', marginBottom: '5rem' }}
             >
                 <Link to="/login">
-                    <button 
-                        className="hud-btn animated-btn" 
+                    <button
+                        className="hud-btn animated-btn"
                         style={{ padding: '1rem 3rem', fontSize: '1.2rem', background: '#0f4c81', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 'bold', opacity: 0 }}
                     >
                         LOGIN
                     </button>
                 </Link>
                 <Link to="/register">
-                    <button 
-                        className="hud-btn animated-btn" 
+                    <button
+                        className="hud-btn animated-btn"
                         style={{ padding: '1rem 3rem', fontSize: '1.2rem', background: 'transparent', color: '#ff4d00', border: '2px solid #ff4d00', cursor: 'pointer', fontWeight: 'bold', opacity: 0 }}
                     >
                         REGISTER
@@ -104,6 +104,30 @@ const LandingPage = () => {
                     <p>All data is protected by advanced authentication protocols. Your personal schedule remains private and accessible only to you.</p>
                 </div>
             </div>
+            <section style={{
+                marginTop: '50px',
+                padding: '40px 20px',
+                backgroundColor: '#f8f9fa',
+                borderRadius: '12px',
+                textAlign: 'center',
+                borderTop: '4px solid #007bff'
+            }}>
+                <h2 style={{ color: '#333' }}>About This Project</h2>
+                <p style={{ maxWidth: '600px', margin: '0 auto 20px auto', color: '#666', lineHeight: '1.6' }}>
+                    The UCA Schedule App was developed to streamline academic management at the University of Central Asia.
+                    It leverages a modern Full-Stack architecture to provide real-time timetable updates and secure user management.
+                </p>
+
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px' }}>
+                    <div style={{ textAlign: 'left' }}>
+                        <h4 style={{ margin: '0', color: '#333' }}>Created by mrtpm</h4>
+                        <div style={{ marginTop: '10px' }}>
+                            <a href="https://www.linkedin.com/in/murtuzo-mamadziyoev-762109332/" target="_blank" rel="noreferrer" style={{ marginRight: '15px', color: '#007bff', textDecoration: 'none', fontWeight: 'bold' }}>LinkedIn</a>
+                            <a href="https://github.com/MurtuzoPM" target="_blank" rel="noreferrer" style={{ color: '#333', textDecoration: 'none', fontWeight: 'bold' }}>GitHub</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
     );
 };
