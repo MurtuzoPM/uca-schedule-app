@@ -107,24 +107,20 @@ const LandingPage = () => {
             <section style={{
                 marginTop: '50px',
                 padding: '40px 20px',
-                backgroundColor: '#f8f9fa',
+                backgroundColor: '#00122b',
                 borderRadius: '12px',
                 textAlign: 'center',
                 borderTop: '4px solid #007bff'
             }}>
-                <h2 style={{ color: '#333' }}>About This Project</h2>
-                <p style={{ maxWidth: '600px', margin: '0 auto 20px auto', color: '#666', lineHeight: '1.6' }}>
+                <h2 style={{ color: '#fe4d01' }}>About This Project</h2>
+                <p style={{ maxWidth: '400px', margin: '0 auto 20px auto', color: '#c5c5cc', lineHeight: '1.6' }}>
                     The UCA Schedule App was developed to streamline academic management at the University of Central Asia.
                     It leverages a modern Full-Stack architecture to provide real-time timetable updates and secure user management.
                 </p>
 
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px' }}>
                     <div style={{ textAlign: 'left' }}>
-                        <h4 style={{ margin: '0', color: '#333' }}>Created by mrtpm</h4>
-                        <div style={{ marginTop: '10px' }}>
-                            <a href="https://www.linkedin.com/in/murtuzo-mamadziyoev-762109332/" target="_blank" rel="noreferrer" style={{ marginRight: '15px', color: '#007bff', textDecoration: 'none', fontWeight: 'bold' }}>LinkedIn</a>
-                            <a href="https://github.com/MurtuzoPM" target="_blank" rel="noreferrer" style={{ color: '#333', textDecoration: 'none', fontWeight: 'bold' }}>GitHub</a>
-                        </div>
+                        <h4 style={{ margin: '0', color: '#fe4d01' }}>Created by mrtpm</h4>
                     </div>
                 </div>
             </section>

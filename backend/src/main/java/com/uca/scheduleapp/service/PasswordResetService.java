@@ -5,11 +5,10 @@ import com.uca.scheduleapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import java.time.LocalDateTime;
+import java.util.Random;
 
 @Service
 public class PasswordResetService {
@@ -18,51 +17,43 @@ public class PasswordResetService {
     private UserRepository userRepository;
 
     @Autowired
-    private JavaMailSender mailSender;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private JavaMailSender mailSender;
 
     public void processForgotPassword(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Generate 6-digit OTP
-        String otp = String.valueOf((int) ((Math.random() * 900000) + 100000));
-        user.setResetToken(otp); // Store OTP in the same token column
+        String otp = String.valueOf(new Random().nextInt(899999) + 100000);
+        user.setResetToken(otp);
         user.setResetTokenExpiry(LocalDateTime.now().plusMinutes(10));
+        
         userRepository.save(user);
+        sendOtpEmail(email, otp);
+    }
 
-        // Send the OTP Email
+    private void sendOtpEmail(String email, String otp) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(user.getEmail());
+        message.setTo(email);
+	message.setFrom("mmamadziyoev56@gmail.com");
         message.setSubject("Your Password Reset Code");
-        message.setText("Your verification code is: " + otp + "\nThis code expires in 10 minutes.");
+        message.setText("Your 6-digit verification code is: " + otp);
         mailSender.send(message);
     }
 
-    private void sendEmail(String to, String link) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(to);
-        message.setSubject("Password Reset Request");
-        message.setText("Click the link below to reset your password:\n" + link);
-        mailSender.send(message);
+    public void updatePassword(String token, String newPassword) {
+        User user = userRepository.findByResetToken(token)
+                .orElseThrow(() -> new RuntimeException("Invalid or incorrect code."));
+
+        if (user.getResetTokenExpiry().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("Code has expired.");
+        }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        user.setResetToken(null);
+        user.setResetTokenExpiry(null);
+        userRepository.save(user);
     }
-
-    public void updatePassword(String otp, String newPassword) {
-    // Look for the user who has this specific OTP
-    User user = userRepository.findByResetToken(otp)
-            .orElseThrow(() -> new RuntimeException("Invalid or incorrect code."));
-
-    // Check if the code has expired
-    if (user.getResetTokenExpiry().isBefore(LocalDateTime.now())) {
-        throw new RuntimeException("The code has expired. Please request a new one.");
-    }
-
-    // Encrypt the new password and clear the token
-    user.setPassword(passwordEncoder.encode(newPassword));
-    user.setResetToken(null);
-    user.setResetTokenExpiry(null);
-    userRepository.save(user);
-}
 }

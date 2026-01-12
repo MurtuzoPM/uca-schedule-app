@@ -36,6 +36,9 @@ services:
       # Настройки для Hibernate
       - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.MySQL8Dialect
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - MAIL_USERNAME=apikey
+      - MAIL_PASSWORD=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
+      - SENDGRID_API_KEY: ${SENDGRID_API_KEY}
     depends_on:
       - db
 
